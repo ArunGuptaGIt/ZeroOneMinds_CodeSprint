@@ -157,11 +157,17 @@ export default function Signup() {
             value={selectedDistrict}
             onChange={(e) => setSelectedDistrict(e.target.value)}
             required
-            className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
+
+
+            className="pl-8 pr-3 py-2 w-full mt-1 border border-gray-300 rounded-md text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition text-sm"
+
+
           >
-            <option value="">-- Select District --</option>
+            <option value="" >-- Select District --</option>
             {districts.map((district, index) => (
+
               <option key={index} value={district}>{district}</option>
+
             ))}
           </select>
         </div>
