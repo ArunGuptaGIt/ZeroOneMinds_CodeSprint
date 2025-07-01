@@ -3,82 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const districts = [
-  "Achham",
-  "Arghakhanchi",
-  "Baglung",
-  "Baitadi",
-  "Bajhang",
-  "Bajura",
-  "Banke",
-  "Bara",
-  "Bardiya",
-  "Bhaktapur",
-  "Bhojpur",
-  "Chitwan",
-  "Dadeldhura",
-  "Dailekh",
-  "Dang",
-  "Darchula",
-  "Dhading",
-  "Dhankuta",
-  "Dhanusha",
-  "Dolakha",
-  "Dolpa",
-  "Doti",
-  "Eastern Rukum",
-  "Gorkha",
-  "Gulmi",
-  "Humla",
-  "Ilam",
-  "Jajarkot",
-  "Jhapa",
-  "Jumla",
-  "Kailali",
-  "Kalikot",
-  "Kanchanpur",
-  "Kapilvastu",
-  "Kaski",
-  "Kathmandu",
-  "Kavrepalanchok",
-  "Khotang",
-  "Lalitpur",
-  "Lamjung",
-  "Mahottari",
-  "Makwanpur",
-  "Manang",
-  "Morang",
-  "Mugu",
-  "Mustang",
-  "Myagdi",
-  "Nawalpur",
-  "Nuwakot",
-  "Okhaldhunga",
-  "Palpa",
-  "Panchthar",
-  "Parbat",
-  "Parsa",
-  "Pyuthan",
-  "Ramechhap",
-  "Rasuwa",
-  "Rautahat",
-  "Rolpa",
-  "Rukum West",
-  "Rupandehi",
-  "Salyan",
-  "Sankhuwasabha",
-  "Saptari",
-  "Sarlahi",
-  "Sindhuli",
-  "Sindhupalchok",
-  "Siraha",
-  "Solukhumbu",
-  "Sunsari",
-  "Surkhet",
-  "Syangja",
-  "Tanahun",
-  "Taplejung",
-  "Terhathum",
-  "Udayapur",
+  "Achham", "Arghakhanchi", "Baglung", "Baitadi", "Bajhang", "Bajura", "Banke", "Bara", "Bardiya", "Bhaktapur",
+  "Bhojpur", "Chitwan", "Dadeldhura", "Dailekh", "Dang", "Darchula", "Dhading", "Dhankuta", "Dhanusha", "Dolakha",
+  "Dolpa", "Doti", "Eastern Rukum", "Gorkha", "Gulmi", "Humla", "Ilam", "Jajarkot", "Jhapa", "Jumla", "Kailali",
+  "Kalikot", "Kanchanpur", "Kapilvastu", "Kaski", "Kathmandu", "Kavrepalanchok", "Khotang", "Lalitpur", "Lamjung",
+  "Mahottari", "Makwanpur", "Manang", "Morang", "Mugu", "Mustang", "Myagdi", "Nawalpur", "Nuwakot", "Okhaldhunga",
+  "Palpa", "Panchthar", "Parbat", "Parsa", "Pyuthan", "Ramechhap", "Rasuwa", "Rautahat", "Rolpa", "Rukum West",
+  "Rupandehi", "Salyan", "Sankhuwasabha", "Saptari", "Sarlahi", "Sindhuli", "Sindhupalchok", "Siraha", "Solukhumbu",
+  "Sunsari", "Surkhet", "Syangja", "Tanahun", "Taplejung", "Terhathum", "Udayapur",
 ];
 
 export default function Signup() {
@@ -90,19 +22,23 @@ export default function Signup() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [choice, setChoice] = useState("vendor");
   const [imageFile, setImageFile] = useState(null);
-  const [price, setPrice] = useState("");  // <-- New state for price
+  const [price, setPrice] = useState("");
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!/^98\d{8}$/.test(phoneNumber)) {
+      alert("Phone number must be 10 digits and start with '98'.");
+      return;
+    }
+
     if (!imageFile) {
       alert("Please upload an image for verification.");
       return;
     }
 
-    // If farmer is selected, ensure price is entered and valid
     if (choice === "farmer" && (!price || isNaN(price) || Number(price) < 0)) {
       alert("Please enter a valid price.");
       return;
@@ -117,17 +53,14 @@ export default function Signup() {
     formData.append("location", selectedDistrict);
     formData.append("type", choice === "farmer" ? 1 : 0);
     formData.append("image_for_verification", imageFile);
-    
-    // Append price only if farmer
+
     if (choice === "farmer") {
       formData.append("price", price);
     }
 
     try {
       const response = await axios.post("http://localhost:8000/api/signup/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (response.status === 201 || response.status === 200) {
@@ -228,24 +161,26 @@ export default function Signup() {
           >
             <option value="">-- Select District --</option>
             {districts.map((district, index) => (
-              <option key={index} value={district}>
-                {district}
-              </option>
+              <option key={index} value={district}>{district}</option>
             ))}
           </select>
         </div>
 
-        <div className="mt-6 relative">
-          <label className="block text-gray-700 font-medium">Phone Number</label>
-          <input
-            type="number"
-            className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
-            placeholder="Enter your Phone Number"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            required
-          />
-        </div>
+<div className="mt-6 relative">
+  <label className="block text-gray-700 font-medium">Phone Number</label>
+  <input
+    type="tel"
+    pattern="98[0-9]{8}"
+    maxLength="10"
+    className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
+    placeholder="e.g., 98XXXXXXXX"
+    value={phoneNumber}
+    onChange={(e) => setPhoneNumber(e.target.value)}
+    required
+  />
+  <p className="text-sm text-gray-500 mt-1">Must be 10 digits and start with "98"</p>
+</div>
+
 
         <div className="mt-6 relative">
           <label className="block text-gray-700 font-medium">Verification Image</label>
@@ -258,7 +193,6 @@ export default function Signup() {
           />
         </div>
 
-        {/* Show price input only if farmer is selected */}
         {choice === "farmer" && (
           <div className="mt-6 relative">
             <label className="block text-gray-700 font-medium">Price</label>
