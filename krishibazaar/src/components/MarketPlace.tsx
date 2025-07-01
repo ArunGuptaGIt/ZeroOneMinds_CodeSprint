@@ -1,4 +1,3 @@
-import { Eye, Edit, Trash2 } from 'lucide-react';
 
 const products = [
   {
