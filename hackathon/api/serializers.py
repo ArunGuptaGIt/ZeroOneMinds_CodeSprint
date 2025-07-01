@@ -36,8 +36,8 @@ class StorageSerializer(serializers.ModelSerializer):
         model = models.Storage
         fields = '__all__'
 
-class FirstNameSerializer(serializers.Serializer):
-    first_name = serializers.CharField()
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
 
 
 
