@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import About from './components/About';
-import Navbar from './components/Navbar';
-import MarketPlace from './components/MarketPlace';
+import About from './component/About';
+import Navbar from './component/Navbar';
+import MarketPlace from './component/MarketPlace';
 import { CheckCircle, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Contact from './components/Contact';
+import Contact from './component/Contact';
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('home');
@@ -98,7 +98,21 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="relative">{/* Image or animation here */}</div>
+             {/* <div className="relative flex flex-col gap-4">
+      {images.map((src, index) => (
+        <motion.img
+          key={index}
+          src={src}
+          alt={`Farm ${index + 1}`}
+          className="rounded-xl shadow-lg w-full max-w-sm"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.5, duration: 0.6 }}
+        />
+      ))}
+    </div> */}
+
+
           </div>
         </div>
       </section>
