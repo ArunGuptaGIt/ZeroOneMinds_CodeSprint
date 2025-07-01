@@ -90,6 +90,7 @@ export default function Signup() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [choice, setChoice] = useState("vendor");
   const [imageFile, setImageFile] = useState(null);
+  const [price, setPrice] = useState("");  // <-- New state for price
 
   const navigate = useNavigate();
 
@@ -98,6 +99,12 @@ export default function Signup() {
 
     if (!imageFile) {
       alert("Please upload an image for verification.");
+      return;
+    }
+
+    // If farmer is selected, ensure price is entered and valid
+    if (choice === "farmer" && (!price || isNaN(price) || Number(price) < 0)) {
+      alert("Please enter a valid price.");
       return;
     }
 
@@ -110,6 +117,11 @@ export default function Signup() {
     formData.append("location", selectedDistrict);
     formData.append("type", choice === "farmer" ? 1 : 0);
     formData.append("image_for_verification", imageFile);
+    
+    // Append price only if farmer
+    if (choice === "farmer") {
+      formData.append("price", price);
+    }
 
     try {
       const response = await axios.post("http://localhost:8000/api/signup/", formData, {
@@ -132,7 +144,11 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200 text-[15px] px-4 py-10">
-      <form onSubmit={handleSubmit} className="bg-white w-[36rem] rounded-b-[4rem] shadow-md p-8 mt-[8rem] transition-all duration-500" encType="multipart/form-data">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white w-[36rem] rounded-b-[4rem] shadow-md p-8 mt-[8rem] transition-all duration-500"
+        encType="multipart/form-data"
+      >
         <h2 className="text-center text-3xl font-bold text-gray-800">Sign Up</h2>
 
         <div className="flex justify-around gap-3 mt-[2rem]">
@@ -241,6 +257,22 @@ export default function Signup() {
             className="w-full p-3 mt-1 border rounded-lg"
           />
         </div>
+
+        {/* Show price input only if farmer is selected */}
+        {choice === "farmer" && (
+          <div className="mt-6 relative">
+            <label className="block text-gray-700 font-medium">Price</label>
+            <input
+              type="number"
+              min="0"
+              className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
+              placeholder="Enter your Price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              required={choice === "farmer"}
+            />
+          </div>
+        )}
 
         <button
           type="submit"

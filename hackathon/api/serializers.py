@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             'first_name', 'last_name', 'password',
             'phoneNumber', 'email', 'type', 'verification',
-            'location', 'image_for_verification'
+            'location', 'image_for_verification','price'
         ]
 
     

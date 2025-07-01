@@ -27,6 +27,8 @@ class User(AbstractUser):
     image_for_verification = models.FileField(upload_to='user_verifications/', null=True, blank=True)
     location = models.CharField(max_length=255, null=False, blank=False)
     verification = models.BooleanField(null=True)
+    price = models.IntegerField(default= 0)
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -42,3 +44,4 @@ class Storage(models.Model):
     description = models.CharField(max_length=500)
     type = models.BooleanField(null=False) # vendor = 0 farmer = 1
     item_photo = models.ImageField(upload_to='storage_photos/', null=True, blank=True)
+    rating = models.FloatField(default=0.0)
