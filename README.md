@@ -5,3 +5,10 @@ GIthub repo for NEC Hackathon
 </h1>
 <h2> Theme: Agriculture </h2>
 <p>KrishiBazaar is a web-based platform designed to bridge gap between farmers and agricultural vendors in Nepal </p>
+
+<h2> Images references </h2>
+ <ul>
+        <li>Unsplash</li>
+        <li>Pixabay</li>
+        <li>Pixels</li>
+    </ul>
