@@ -1,6 +1,5 @@
 import React from 'react';
 import { 
-  
   Sprout, 
   ShoppingCart, 
   LogOut,
@@ -17,8 +16,12 @@ const FarmerSidebar: React.FC<FarmerSidebarProps> = ({ activeTab, setActiveTab }
     { id: 'crops', label: 'My Crops', icon: Sprout },
     { id: 'addcrops', label: 'Add Crops', icon: Sprout },
     { id: 'buyproduct', label: 'Buy Product', icon: ShoppingCart },
-   
   ];
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    window.location.href = '/login'; // redirect to login page
+  };
 
   return (
     <div className="bg-white h-screen w-64 shadow-lg border-r border-gray-200 flex flex-col">
@@ -58,7 +61,10 @@ const FarmerSidebar: React.FC<FarmerSidebarProps> = ({ activeTab, setActiveTab }
 
       {/* Logout */}
       <div className="p-4 border-t border-gray-200">
-        <button className="w-full flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200"
+        >
           <LogOut className="h-5 w-5" />
           <span className="font-medium">Logout</span>
         </button>

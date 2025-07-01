@@ -9,5 +9,7 @@ urlpatterns = [
     path('storage/update_delete_item/<int:item_id>',views.UpdateDeleteItem,name='UpdateDeleteItem'),
     path('storage/BuyProduct/',views.BuyProduct,name='BuyProduct'),
     path('userdashboard/',views.UserDashboardInfo,name='UserDashboardInfo'),
+    path('availableproducts/', views.AvailableProducts, name='available-products'),
+    path('addmoney/', views.AddMoney, name='add-money'),
 
 ]

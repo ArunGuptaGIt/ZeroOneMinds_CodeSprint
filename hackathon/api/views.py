@@ -86,7 +86,6 @@ def UpdateDeleteItem(request,item_id):
             
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated]) 
 def BuyProduct(request):
     buyer_email = request.data.get('buyer_email')
     seller_email = request.data.get('seller_email')
@@ -226,3 +225,41 @@ def UserDashboardInfo(request):
         "low_stock_products": low_stock_serialized
     }, status=200)
 
+
+@api_view(['POST'])
+def AvailableProducts(request):
+    email = request.data.get('email')
+    if not email:
+        return Response({"error": "Email is required"}, status=400)
+    
+    # Exclude user's own products
+    products = models.Storage.objects.exclude(email=email)
+    serializer = serializers.StorageSerializer(products, many=True)
+    return Response(serializer.data, status=200)
+
+
+@api_view(['POST'])
+def AddMoney(request):
+    email = request.data.get('email')
+    amount = request.data.get('amount')
+
+    if not email or amount is None:
+        return Response({"error": "Email and amount are required"}, status=400)
+
+    try:
+        amount = int(amount)
+        if amount <= 0:
+            return Response({"error": "Amount must be positive"}, status=400)
+    except ValueError:
+        return Response({"error": "Amount must be a valid integer"}, status=400)
+
+    try:
+        user = models.User.objects.get(email=email)
+    except models.User.DoesNotExist:
+        return Response({"error": "User not found"}, status=404)
+
+    with transaction.atomic():
+        user.price += amount
+        user.save()
+
+    return Response({"message": f"Added NPR {amount} to wallet", "new_balance": user.price}, status=200)

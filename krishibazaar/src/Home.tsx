@@ -188,10 +188,7 @@ export default function Home() {
         <About />
       </section>
 
-      {/* MARKET SECTION */}
-      <section ref={marketRef}>
-        <MarketPlace />
-      </section>
+    
 
       <section ref={contactRef}>
         <Contact />

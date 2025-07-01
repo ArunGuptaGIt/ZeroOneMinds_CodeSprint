@@ -1,83 +1,125 @@
-import { useState } from 'react';
-
-const products = [
-  {
-    id: 1,
-    name: 'Organic Tomatoes',
-    category: 'Vegetables',
-    price: 120,
-    stock: 45,
-    unit: 'kg',
-    status: 'Active',
-    image: 'https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
-  },
-  {
-    id: 2,
-    name: 'Fresh Spinach',
-    category: 'Leafy Greens',
-    price: 80,
-    stock: 12,
-    unit: 'bundle',
-    status: 'Low Stock',
-    image: 'https://images.pexels.com/photos/2255935/pexels-photo-2255935.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
-  },
-  {
-    id: 3,
-    name: 'Bell Peppers',
-    category: 'Vegetables',
-    price: 200,
-    stock: 0,
-    unit: 'kg',
-    status: 'Out of Stock',
-    image: 'https://images.pexels.com/photos/1268101/pexels-photo-1268101.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
-  },
-  {
-    id: 4,
-    name: 'Organic Carrots',
-    category: 'Root Vegetables',
-    price: 90,
-    stock: 30,
-    unit: 'kg',
-    status: 'Active',
-    image: 'https://images.pexels.com/photos/143133/pexels-photo-143133.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop'
-  }
-];
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function BuyProduct() {
-  const [walletBalance, setWalletBalance] = useState(500); // Initial wallet balance
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [products, setProducts] = useState([]);
   const [showAddMoneyModal, setShowAddMoneyModal] = useState(false);
   const [addAmount, setAddAmount] = useState('');
 
-//   const handleBuy = (productId, productPrice) => {
-//     if (walletBalance >= productPrice) {
-//       setWalletBalance(walletBalance - productPrice);
-//       alert(`Successfully purchased! New balance: NPR ${walletBalance - productPrice}`);
-//     } else {
-//       alert('Insufficient wallet balance. Please add money to your wallet.');
-//     }
-//   };
+  const userEmail = sessionStorage.getItem('userEmail');
 
-  const handleAddMoney = () => {
-    const amount = parseFloat(addAmount);
-    if (!isNaN(amount) && amount > 0) {
-      setWalletBalance(walletBalance + amount);
+  useEffect(() => {
+    if (!userEmail) {
+      alert('No user logged in!');
+      return;
+    }
+
+    fetchWalletBalance();
+    fetchProducts();
+  }, []);
+
+  const fetchWalletBalance = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/userdashboard/', {
+        email: userEmail,
+      });
+      setWalletBalance(response.data.revenue || 0);
+    } catch (error) {
+      console.error('Error fetching wallet balance:', error);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/availableproducts/', {
+        email: userEmail,
+      });
+      const items = response.data.map((item, index) => ({
+        id: index + 1,
+        name: item.item,
+        category: item.description || 'General',
+        price: item.price,
+        stock: item.count,
+        unit: item.weightOfEachPacket || 'unit',
+        status: item.count === 0 ? 'Out of Stock' : item.count < 20 ? 'Low Stock' : 'Active',
+        image: item.item_photo || 'https://via.placeholder.com/300x200?text=No+Image',
+        seller_email: item.email,  // <-- seller email added here
+      }));
+      setProducts(items);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  const handleAddMoney = async () => {
+  const amount = parseInt(addAmount, 10);
+  if (!isNaN(amount) && amount > 0) {
+    try {
+      const response = await axios.post('http://localhost:8000/api/addmoney/', {
+        email: userEmail,
+        amount,
+      });
+      setWalletBalance(response.data.new_balance);
       setShowAddMoneyModal(false);
       setAddAmount('');
       alert(`Successfully added NPR ${amount} to your wallet!`);
-    } else {
-      alert('Please enter a valid amount');
+    } catch (error) {
+      alert('Failed to add money. Please try again.');
+      console.error(error);
+    }
+  } else {
+    alert('Please enter a valid amount');
+  }
+};
+
+
+  const handleBuy = async (product) => {
+    const count = 1;
+
+    try {
+      const response = await axios.post('http://localhost:8000/api/storage/BuyProduct/', {
+        buyer_email: userEmail,
+        seller_email: product.seller_email,  // <-- use dynamic seller email here
+        item: product.name,
+        count,
+      });
+
+      const { total_price, buyer_remaining_balance } = response.data;
+
+      setWalletBalance(buyer_remaining_balance);
+
+      setProducts(prev =>
+        prev.map(p =>
+          p.id === product.id
+            ? {
+                ...p,
+                stock: p.stock - count,
+                status: p.stock - count <= 0
+                  ? 'Out of Stock'
+                  : p.stock - count < 20
+                  ? 'Low Stock'
+                  : 'Active'
+              }
+            : p
+        )
+      );
+
+      alert(`Purchase successful! Total: NPR ${total_price}`);
+    } catch (error) {
+      const message = error.response?.data?.error || 'Something went wrong.';
+      alert(`Purchase failed: ${message}`);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-
-        {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-900">Buy Products</h1>
           <p className="text-gray-600 mt-2">Select from our fresh farm products</p>
         </div>
+
         {/* Wallet Section */}
         <div className="flex justify-end items-center mb-6">
           <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
@@ -99,30 +141,31 @@ export default function BuyProduct() {
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => (
-            <div 
-              key={product.id} 
+            <div
+              key={product.id}
               className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100"
             >
-              {/* Product Image */}
               <div className="relative aspect-square">
-                <img 
-                  src={product.image} 
+                <img
+                  src={`http://localhost:8000/${product.image}`}
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
-                {/* Status Badge */}
                 <div className="absolute top-3 right-3">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    product.status === 'Active' ? 'bg-green-100 text-green-800' :
-                    product.status === 'Low Stock' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                      product.status === 'Active'
+                        ? 'bg-green-100 text-green-800'
+                        : product.status === 'Low Stock'
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : 'bg-red-100 text-red-800'
+                    }`}
+                  >
                     {product.status}
                   </span>
                 </div>
               </div>
 
-              {/* Product Info */}
               <div className="p-4">
                 <div className="mb-2">
                   <h3 className="font-semibold text-lg text-gray-900 line-clamp-1">{product.name}</h3>
@@ -131,28 +174,30 @@ export default function BuyProduct() {
 
                 <div className="flex justify-between items-end">
                   <div>
-                    <p>Name</p>
                     <p className="text-xl font-bold text-green-700">NPR {product.price}</p>
                     <p className="text-xs text-gray-500">per {product.unit}</p>
                   </div>
                   <div className="text-right">
-                    <p className={`text-sm font-medium ${
-                      product.stock > 20 ? 'text-gray-900' :
-                      product.stock > 0 ? 'text-yellow-700' :
-                      'text-red-700'
-                    }`}>
-                      {product.stock} {product.unit}
+                    <p
+                      className={`text-sm font-medium ${
+                        product.stock > 20
+                          ? 'text-gray-900'
+                          : product.stock > 0
+                          ? 'text-yellow-700'
+                          : 'text-red-700'
+                      }`}
+                    >
+                      {product.stock}
                     </p>
                     <p className="text-xs text-gray-500">available</p>
                   </div>
                 </div>
 
-                {/* Action Button */}
                 <button
                   disabled={product.status === 'Out of Stock'}
-                //   onClick={() => handleBuy(product.id, product.price)}
+                  onClick={() => handleBuy(product)}
                   className={`w-full mt-4 py-2 rounded-lg font-medium transition-colors ${
-                    product.status !== 'Out of Stock' 
+                    product.status !== 'Out of Stock'
                       ? 'bg-green-600 hover:bg-green-700 text-white'
                       : 'bg-gray-200 text-gray-500 cursor-not-allowed'
                   }`}
