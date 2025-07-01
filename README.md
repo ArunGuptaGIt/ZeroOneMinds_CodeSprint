@@ -29,6 +29,7 @@ KrishiBazaar is a web-based platform designed to bridge gap between farmers and 
 
 ## ✨Key Features
 - Login
+ 
 - User Dashboard
   - Farmer dashboard
   - Vendor dashboard
@@ -48,7 +49,7 @@ KrishiBazaar is a web-based platform designed to bridge gap between farmers and 
 - Pixabay
 - Pixels
 
-  ## Author  
+  ## Team
   [Arun Gupta](https://www.linkedin.com/in/arungupta36904/)  
   [Ayusha Shrestha](https://www.linkedin.com/in/ayusha-shrestha-aayusha/)  
   [Utkristha Bhattarai](https://www.linkedin.com/in/utkristha-bhattarai-937ab1284/)  
