@@ -1,8 +1,11 @@
-from rest_framework.decorators import api_view,parser_classes
+from rest_framework.decorators import api_view,parser_classes,permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser,JSONParser
 from rest_framework.response import Response
 from django.db.models import Q
 from django.contrib.auth import authenticate
+from rest_framework.permissions import IsAuthenticated
+from django.db import transaction
+
 
 from . import models
 from . import serializers
@@ -90,3 +93,59 @@ def UpdateDeleteItem(request,item_id):
                 return Response({"message" : "item deleted"})
             except models.Storage.DoesNotExist:
                 return Response({"message" : "The item does not exist"},status=404)
+            
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def BuyItems(request, item_id):
+    try:
+        item = models.Storage.objects.get(id=item_id)
+    except models.Storage.DoesNotExist:
+        return Response({"message": "The item does not exist"}, status=404)
+
+    buyer = request.user
+    quantity = request.data.get('quantity')
+
+    if quantity is None:
+        return Response({"message": "Quantity is required"}, status=400)
+
+    try:
+        quantity = int(quantity)
+    except ValueError:
+        return Response({"message": "Quantity must be an integer"}, status=400)
+
+    if quantity <= 0:
+        return Response({"message": "Quantity must be positive"}, status=400)
+
+    if quantity > item.count:
+        return Response({"message": "Not enough items in stock"}, status=400)
+
+    total_price = quantity * item.price
+
+    if buyer.price < total_price:
+        return Response({"message": "Insufficient balance"}, status=400)
+
+    # Find seller by first_name (assuming unique first_name, else this may cause issues)
+    try:
+        seller = models.User.objects.get(first_name=item.first_name)
+    except models.User.DoesNotExist:
+        return Response({"message": "Seller not found"}, status=404)
+
+    # Update in a transaction to avoid partial updates
+    with transaction.atomic():
+        item.count -= quantity
+        item.save()
+
+        buyer.price -= total_price
+        buyer.save()
+
+        seller.price += total_price
+        seller.save()
+
+    return Response({
+        "message": "Purchase successful",
+        "remaining_stock": item.count,
+        "buyer_balance": buyer.price,
+        "seller_balance": seller.price
+    })
