@@ -49,23 +49,28 @@ KrishiBazaar is a web-based platform designed to bridge gap between farmers and 
 - Low stock notifications  
 - Interface to add/edit products  
 
+### 🛒Browse Products
+- Browse listed products
+- View prices
+- View stocks
+
 ### 📦 Product Management
 - Easy-to-use interface to:
   - 📥 Add new products (seeds or crops)  
   - ✏️ Edit existing products  
   - 🗑️ Remove out-of-stock items
-### Transparent Pricing
+### 💲Transparent Pricing
  - Real-time price updates and fair trade practices. 
 
 
   
 ## 🛠Tech Stack
-### Frontend
+### 🌐Frontend
 - react.js  
 - tailwind css  
-### backend
+### ⚙️Backend
 - django rest framework
-### database 
+### 🗃️Database 
 - SQLite3
 
 ## 💡 Usage Flow
