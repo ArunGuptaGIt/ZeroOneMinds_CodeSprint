@@ -37,7 +37,7 @@ class User(AbstractUser):
 
 
 class Storage(models.Model):
-    first_name = models.CharField()
+    email = models.EmailField()
     item = models.CharField()
     count = models.IntegerField()
     weightOfEachPacket = models.IntegerField()
@@ -45,3 +45,5 @@ class Storage(models.Model):
     type = models.BooleanField(null=False) # vendor = 0 farmer = 1
     item_photo = models.ImageField(upload_to='storage_photos/', null=True, blank=True)
     rating = models.FloatField(default=0.0)
+    price = models.IntegerField()
+    category = models.CharField()

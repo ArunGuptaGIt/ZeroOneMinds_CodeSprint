@@ -14,27 +14,32 @@ export default function Login() {
     }
   }, [navigate]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const response = await axios.post("http://localhost:8000/api/login/", {
-        email: email,
-        password: password,
-      });
+  try {
+    const response = await axios.post("http://localhost:8000/api/login/", {
+      email,
+      password,
+    });
 
-      if (response.status === 200) {
-        alert("Login successful!");
-        // Save login info to sessionStorage
-        sessionStorage.setItem("loggedIn", "true");
-        sessionStorage.setItem("userEmail", email);
-        navigate("/dashboard");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Login failed. Please check your email and password.");
+    if (response.status === 200) {
+      const userData = response.data;
+
+      // Save login info to sessionStorage
+      sessionStorage.setItem("loggedIn", "true");
+      sessionStorage.setItem("userEmail", userData.email);
+      sessionStorage.setItem("userType", userData.type); // Save type here
+
+      alert("Login successful!");
+      navigate("/dashboard");
     }
-  };
+  } catch (error) {
+    console.error(error);
+    alert("Login failed. Please check your email and password.");
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200 p-4">
