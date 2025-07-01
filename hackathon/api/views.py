@@ -69,7 +69,7 @@ def UpdateDeleteItem(request,item_id):
             except models.Storage.DoesNotExist:
                 return Response({"message" : "The item does not exist"},status=404)
             
-            serializer = serializers.storage_serializer(item,data = request.data,partial = True)
+            serializer = serializers.StorageSerializer(item,data = request.data,partial = True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data,status=200)
@@ -147,5 +147,82 @@ def BuyProduct(request):
         "message": "Purchase successful.",
         "total_price": total_price,
         "buyer_remaining_balance": buyer.price
+    }, status=200)
+
+
+@api_view(['POST'])
+@parser_classes([JSONParser])
+def UserDashboardInfo(request):
+    email = request.data.get('email')
+    if not email:
+        return Response({"error": "Email is required."}, status=400)
+
+    try:
+        user = models.User.objects.get(email=email)
+    except models.User.DoesNotExist:
+        return Response({"error": "User not found."}, status=404)
+
+    # Get user's products
+    user_products = models.Storage.objects.filter(email=email)
+
+    # Total products listed
+    total_products = user_products.count()
+
+    # Revenue is from User model
+    revenue = user.price
+
+    # Low stock products (count < 10)
+    low_stock = user_products.filter(count__lt=10)
+
+    low_stock_serialized = serializers.StorageSerializer(low_stock, many=True).data
+
+    data =         {
+        "email": user.email,
+        "revenue": revenue,
+        "total_products": total_products,
+        "low_stock_products": low_stock_serialized
+    }
+    
+    print(data)
+
+    return Response({
+        "email": user.email,
+        "revenue": revenue,
+        "total_products": total_products,
+        "low_stock_products": low_stock_serialized
+    }, status=200)
+
+
+@api_view(['POST'])
+@parser_classes([JSONParser])
+def UserDashboardInfo(request):
+    email = request.data.get('email')
+    if not email:
+        return Response({"error": "Email is required."}, status=400)
+
+    try:
+        user = models.User.objects.get(email=email)
+    except models.User.DoesNotExist:
+        return Response({"error": "User not found."}, status=404)
+
+    # Get user's products
+    user_products = models.Storage.objects.filter(email=email)
+
+    # Total products listed
+    total_products = user_products.count()
+
+    # Revenue is from User model
+    revenue = user.price
+
+    # Low stock products (count < 10)
+    low_stock = user_products.filter(count__lt=10)
+
+    low_stock_serialized = serializers.StorageSerializer(low_stock, many=True).data
+
+    return Response({
+        "email": user.email,
+        "revenue": revenue,
+        "total_products": total_products,
+        "low_stock_products": low_stock_serialized
     }, status=200)
 
