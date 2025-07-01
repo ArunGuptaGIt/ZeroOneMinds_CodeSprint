@@ -1,22 +1,23 @@
 import React from 'react';
 import { 
-  LayoutDashboard, 
-  Package, 
+  
+  Sprout, 
+  ShoppingCart, 
   LogOut,
   Leaf
 } from 'lucide-react';
 
-
-interface SidebarProps {
+interface FarmerSidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }
-const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
+
+const FarmerSidebar: React.FC<FarmerSidebarProps> = ({ activeTab, setActiveTab }) => {
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'products', label: 'Products', icon: Package },
-    { id: 'addproducts', label: 'Add Products', icon: Package },
-    
+    { id: 'crops', label: 'My Crops', icon: Sprout },
+    { id: 'addcrops', label: 'Add Crops', icon: Sprout },
+    { id: 'buyproduct', label: 'Buy Product', icon: ShoppingCart },
+   
   ];
 
   return (
@@ -29,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">KrishiBazaar</h1>
-            <p className="text-sm text-gray-500">Vendor Dashboard</p>
+            <p className="text-sm text-gray-500">Farmer Dashboard</p>
           </div>
         </div>
       </div>
@@ -66,4 +67,4 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
   );
 };
 
-export default Sidebar;
+export default FarmerSidebar;

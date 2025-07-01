@@ -56,10 +56,13 @@ export default function Navbar({ activeSection }: NavbarProps) {
 
           
           <div className="flex items-center space-x-4">
-            <button className="p-2 text-gray-600 hover:text-green-600 transition-colors">
-              <Search className="h-5 w-5" />
-            </button>
-           
+              {/* 🟢 Search icon as link to #market */}
+              <a
+                href="#market"
+                className="p-2 text-gray-600 hover:text-green-600 transition-colors"
+              >
+                <Search className="h-5 w-5" />
+              </a>
             
               <Link to='/login'>
             <div className="flex items-center space-x-2 h-[3rem] w-[6.5rem] rounded-2xl hover:bg-green-200  justify-center">
