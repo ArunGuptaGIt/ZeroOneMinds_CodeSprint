@@ -20,6 +20,16 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+    
+class UserReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = [
+            'first_name', 'last_name',
+            'phoneNumber', 'email', 'type', 'verification',
+            'location', 'image_for_verification'
+        ]
+        read_only_fields = fields
 
 class StorageSerializer(serializers.ModelSerializer):
     class Meta:

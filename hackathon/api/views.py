@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view,parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser,JSONParser
 from rest_framework.response import Response
 from django.db.models import Q
+from django.contrib.auth import authenticate
 
 from . import models
 from . import serializers
@@ -38,7 +39,21 @@ def GetItemsForVendors(request):
         return Response(serializer_.data,status=200)
     return Response(serializer.errors,status=400)
             
+@api_view(['POST'])
+def UserLogin(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
 
+    if not email or not password:
+        return Response({"detail": "Email and password required."}, status=400)
+
+    user = authenticate(request, email=email, password=password)
+    if user is not None:
+        # User is valid, serialize and return user data (excluding sensitive info)
+        serializer = serializers.UserReadSerializer(user)
+        return Response(serializer.data, status=200)
+    else:
+        return Response({"detail": "Invalid credentials."}, status=401)
 
 @api_view(['POST'])
 def GetItemsForFarmers(request):
