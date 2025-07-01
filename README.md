@@ -2,7 +2,11 @@
 GIthub repo for NEC COdesprint Hackathon
 
 # 🌱KrishiBazaar:A Transparent Digital Marketplace and platform for Farmers and Vendors
+
+
 ## Theme: Agriculture
+## Team name: ZeroOneMinds
+## Introduction
 KrishiBazaar is a web-based platform designed to bridge gap between farmers and agricultural vendors in Nepal.  
 
 ## 📌 Project Overview
@@ -27,29 +31,73 @@ KrishiBazaar is a web-based platform designed to bridge gap between farmers and 
 - Farmers can also sell their own produced crops at self-determined prices.  
 - During transactions, delivery locations are selected, and distance-based delivery fees are calculated and shown, promoting trust and transparency.  
 
-## ✨Key Features
-- Login
- 
-- User Dashboard
-  - Farmer dashboard
-  - Vendor dashboard
 
+  
+## ✨Key Features
+### Login/Registration
+   - **Vendor Registration**: Vendors can create profiles and list their products.  
+   - **Farmer Dashboard**: Farmers can create profiles and list their products.
+### 🧑‍🌾 Farmer Dashboard
+- View total revenue from sold products  
+- See products listed  
+- Low stock alert  
+- Add, edit, or remove product listings  
+
+### 🏪 Vendor Dashboard
+- Track total purchases or revenue from seeds sold  
+- View product inventory  
+- Low stock notifications  
+- Interface to add/edit products  
+
+### 📦 Product Management
+- Easy-to-use interface to:
+  - 📥 Add new products (seeds or crops)  
+  - ✏️ Edit existing products  
+  - 🗑️ Remove out-of-stock items
+### Transparent Pricing
+ - Real-time price updates and fair trade practices. 
+
+
+  
 ## 🛠Tech Stack
 ### Frontend
--react.js
--tailwind css
+- react.js  
+- tailwind css  
 ### backend
 - django rest framework
-- database SQLite3
+### database 
+- SQLite3
 
-## Future Scope
+## 💡 Usage Flow
 
-## Images references  
+1. 👤 **Register/Login** as a Farmer or Vendor  
+2. 🧭 Access your custom **dashboard**  
+3. 📈 Monitor **total revenue**, product stock, and alerts  
+4. ➕ Add or edit your **product listings**  
+5. 🛒 Farmers: **Buy seeds** from verified vendors  
+6. 📦 Vendors: **Sell** seeds and manage inventory
+
+
+## 🎯Target Users
+- Small and medium-scale farmers  
+- Agricultural vendors and seed suppliers  
+- Cooperative farming groups
+
+## 🚀 Innovation & Impact
+
+- 💰 **Boosts Farmer Income** – Enables direct selling at better prices  
+- 🛒 **Supports Vendors** – Expands market to remote areas  
+- 💡 **Encourages Agri-Tech** – Drives digital transformation in farming  
+- 🧩 **Reduces Exploitation** – Minimizes middleman dependency  
+
+## 🔮Future Scope
+
+## 📸Images references  
 - Unsplash
 - Pixabay
 - Pixels
 
-  ## Team
+## 📬Authors Contact
   [Arun Gupta](https://www.linkedin.com/in/arungupta36904/)  
   [Ayusha Shrestha](https://www.linkedin.com/in/ayusha-shrestha-aayusha/)  
   [Utkristha Bhattarai](https://www.linkedin.com/in/utkristha-bhattarai-937ab1284/)  
