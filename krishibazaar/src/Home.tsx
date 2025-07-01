@@ -1,16 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
-import About from './component/About';
-import Navbar from './component/Navbar';
-import MarketPlace from './component/MarketPlace';
-import { CheckCircle, Clock } from 'lucide-react';
-import { motion } from 'framer-motion';
-import Contact from './component/Contact';
+import { useEffect, useRef, useState } from "react";
+import About from "./components/About";
+import Navbar from "./components/Navbar";
+import MarketPlace from "./components/MarketPlace";
+import { CheckCircle, Clock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Contact from "./components/Contact";
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState("home");
   const aboutRef = useRef<HTMLElement | null>(null);
   const marketRef = useRef<HTMLElement | null>(null);
-  const contactRef = useRef<HTMLElement | null>(null); // 🆕 Added contactRef
+  const contactRef = useRef<HTMLElement | null>(null);
+
+  const images = ["/homeimg1.jpg", "/homeimg2.jpg", "/homeimg3.jpg", "/homeimg4.jpg", "/homeimg5.jpg", "/homeimg6.jpg", "/homeimg7.jpg", "/homeimg8.jpg", "/homeimg9.png", "/homeimg10.jpg","/homeimg11.jpg" ];
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,21 +32,49 @@ export default function Home() {
       const contactTop = contactRef.current?.offsetTop || 0;
 
       if (scrollY >= contactTop) {
-        setActiveSection('contact');
+        setActiveSection("contact");
       } else if (scrollY >= marketTop) {
-        setActiveSection('market');
+        setActiveSection("market");
       } else if (scrollY >= aboutTop) {
-        setActiveSection('about');
+        setActiveSection("about");
       } else {
-        setActiveSection('home');
+        setActiveSection("home");
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Variants for sliding images with no gap
+  const variants = {
+  enter: {
+    opacity: 0,
+    scale: 1.02,
+    position: "absolute" as const,
+  },
+  center: {
+    opacity: 1,
+    scale: 1,
+    position: "relative" as const,
+    transition: {
+      duration: 0.8,
+      ease: "easeInOut",
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.98,
+    position: "absolute" as const,
+    transition: {
+      duration: 0.8,
+      ease: "easeInOut",
+    },
+  },
+};
+
   return (
-    <div id='home'>
+    <div id="home">
       <Navbar activeSection={activeSection} />
 
       {/* HERO SECTION */}
@@ -45,13 +84,28 @@ export default function Home() {
             <div className="space-y-8 pt-[4rem]">
               <div className="space-y-4">
                 <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                  Grow Your{' '}
-                  <span className="text-green-600">Agricultural</span>
+                  Grow Your{" "}
+                  <motion.span
+                    initial={{ color: "#000000" }}
+                    animate={{ color: "#16a34a" }}
+                    transition={{ duration: 1, delay: 0.6 }}
+                    className="inline-block"
+                  >
+                    Agricultural
+                  </motion.span>
                   <br />
-                  <span className="text-green-600">Dreams</span>
+                  <motion.span
+                    initial={{ color: "#000000" }}
+                    animate={{ color: "#16a34a" }}
+                    transition={{ duration: 1, delay: 0.6 }}
+                    className="inline-block"
+                  >
+                    Dreams
+                  </motion.span>
                 </h1>
                 <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
-                  with <span className="font-semibold text-green-600">KrishiBazaar</span>
+                  with{" "}
+                  <span className="font-semibold text-green-600">KrishiBazaar</span>
                 </p>
               </div>
 
@@ -87,32 +141,44 @@ export default function Home() {
               </motion.div>
 
               <div className="flex flex-wrap gap-6 pt-4">
-                <div className="flex items-center space-x-2 text-green-600">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.66 }}
+                  className="flex items-center space-x-2 text-green-600"
+                >
                   <CheckCircle className="h-5 w-5" />
                   <span className="text-sm font-medium">Verified Sellers</span>
-                </div>
-                <div className="flex items-center space-x-2 text-green-600">
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.88 }}
+                  className="flex items-center space-x-2 text-green-600"
+                >
                   <Clock className="h-5 w-5" />
                   <span className="text-sm font-medium">Fast Delivery</span>
-                </div>
+                </motion.div>
               </div>
             </div>
 
-             {/* <div className="relative flex flex-col gap-4">
-      {images.map((src, index) => (
-        <motion.img
-          key={index}
-          src={src}
-          alt={`Farm ${index + 1}`}
-          className="rounded-xl shadow-lg w-full max-w-sm"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.5, duration: 0.6 }}
-        />
-      ))}
-    </div> */}
-
-
+            {/* UPDATED IMAGE SLIDER */}
+            <div className="relative w-full max-w-md h-100 rounded-lg overflow-hidden shadow-lg">
+             <div className="relative w-full max-w-md h-100 rounded-lg overflow-hidden shadow-lg">
+  <AnimatePresence mode="wait">
+    <motion.img
+      key={images[currentImageIndex]}
+      src={images[currentImageIndex]}
+      alt={`Home image ${currentImageIndex + 1}`}
+      variants={variants}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      className="object-cover w-full h-full rounded-lg"
+    />
+  </AnimatePresence>
+</div>
+            </div>
           </div>
         </div>
       </section>
@@ -128,7 +194,7 @@ export default function Home() {
       </section>
 
       <section ref={contactRef}>
-        <Contact/>
+        <Contact />
       </section>
     </div>
   );

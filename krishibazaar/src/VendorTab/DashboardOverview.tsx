@@ -32,6 +32,11 @@ const DashboardOverview = () => {
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
+       <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-6 text-white">
+        <h1 className="text-2xl font-bold mb-2">Welcome back, Ram Bahadur!</h1>
+        <p className="text-green-100">Here's what's happening on your farm today</p>
+      </div>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {stats.map((stat, index) => (
           <div key={index} className="bg-white h-[10rem] p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
