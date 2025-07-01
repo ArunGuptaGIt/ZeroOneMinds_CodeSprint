@@ -96,7 +96,8 @@ KrishiBazaar is a web-based platform designed to bridge gap between farmers and 
 - 🧩 **Reduces Exploitation** – Minimizes middleman dependency  
 
 ## 🔮Future Scope
-
+- **BlockChain for Trust**-secure, tamper-proof transaction records
+- **Partnership with Agri**-Banks-easy access to microloans for farmers
 ## 📸Images references  
 - Unsplash
 - Pixabay
