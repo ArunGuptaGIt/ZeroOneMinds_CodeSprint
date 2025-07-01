@@ -49,9 +49,9 @@ KrishiBazaar is a web-based platform designed to bridge gap between farmers and 
 - Pixels
 
   ## Author  
-  [Arun Gupta](https://www.linkedin.com/in/arungupta36904/)
-  [Ayusha Shrestha](https://www.linkedin.com/in/ayusha-shrestha-aayusha/)
-  [Utkristha Bhattarai](https://www.linkedin.com/in/utkristha-bhattarai-937ab1284/)
-  [Avinash Dahal](https://www.linkedin.com/in/avinash-dahal-3a4591339/)
+  [Arun Gupta](https://www.linkedin.com/in/arungupta36904/)  
+  [Ayusha Shrestha](https://www.linkedin.com/in/ayusha-shrestha-aayusha/)  
+  [Utkristha Bhattarai](https://www.linkedin.com/in/utkristha-bhattarai-937ab1284/)  
+  [Avinash Dahal](https://www.linkedin.com/in/avinash-dahal-3a4591339/)  
   
   
