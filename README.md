@@ -10,26 +10,26 @@ GIthub repo for NEC COdesprint Hackathon
 KrishiBazaar is a web-based platform designed to bridge gap between farmers and agricultural vendors in Nepal.  
 
 ## 📌 Project Overview
-### Problem statement: 
+### ‼️Problem statement: 
 Farmers and agricultural vendors in Nepal face inefficiencies in trading quality seeds and produce due to:   
 - Lack of price transparency  
 - Unfair middlemen exploitation  
 - Unreliable logistics and delivery costs  
 - Limited access to trustworthy buyers/sellers  
  This results in financial losses for farmers and vendors, hindering agricultural growth.   
- ### Objective
+ ### 🚨Objective
  To build a transparent online marketplace that connects farmers and vendors, allowing secure buying and selling of seeds and crops in Nepal that:   
 - Allows vendors to register shops, list seeds with prices and set locations  
 - Enables farmers to buy seeds or sell their produce directly at fair prices  
 - Automatically calculates distance-based delivery fees for transparency  
 - Provides verified user profiles to build trust.   
 
-### Solution Overview
+### 💡Solution Overview
 KrishiBazaar is a web-based platform designed to bridge gap between farmers and agricultural vendors in Nepal in which:   
 - Vendors register their shop with a location and list seeds with prices and other details.  
-- Farmers log in, view vendor listings, and purchase seeds by searching their requirements.  
+- Farmers log in, view vendor listings, and purchase seeds by browsing the marketplace.  
 - Farmers can also sell their own produced crops at self-determined prices.  
-- During transactions, delivery locations are selected, and distance-based delivery fees are calculated and shown, promoting trust and transparency.  
+
 
 
   
