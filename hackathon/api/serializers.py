@@ -32,6 +32,7 @@ class UserReadSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 class StorageSerializer(serializers.ModelSerializer):
+    image_for_verification = serializers.ImageField(required=False, allow_null=True)
     class Meta:
         model = models.Storage
         fields = '__all__'

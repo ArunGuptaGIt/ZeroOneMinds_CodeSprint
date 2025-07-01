@@ -37,14 +37,7 @@ export default function Navbar({ activeSection }: NavbarProps) {
             >
               About
             </a>
-            <a
-              href="#market"
-              className={`font-medium transition-colors ${
-                activeSection === 'market' ? 'text-green-600' : 'text-gray-600 hover:text-green-600'
-              }`}
-            >
-              Marketplace
-            </a>
+           
             <a
               href="#contact"
               className={`font-medium transition-colors ${

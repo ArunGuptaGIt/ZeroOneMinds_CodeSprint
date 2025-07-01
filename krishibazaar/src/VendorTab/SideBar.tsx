@@ -6,18 +6,26 @@ import {
   Leaf
 } from 'lucide-react';
 
-
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }
+
 const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'products', label: 'Products', icon: Package },
     { id: 'addproducts', label: 'Add Products', icon: Package },
-    
   ];
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    // Option 1: Reload current page (you can remove comment if you want this)
+    // window.location.reload();
+
+    // Option 2: Redirect to login page
+    window.location.href = '/login';
+  };
 
   return (
     <div className="bg-white h-screen w-64 shadow-lg border-r border-gray-200 flex flex-col">
@@ -57,7 +65,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
 
       {/* Logout */}
       <div className="p-4 border-t border-gray-200">
-        <button className="w-full flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200"
+        >
           <LogOut className="h-5 w-5" />
           <span className="font-medium">Logout</span>
         </button>
