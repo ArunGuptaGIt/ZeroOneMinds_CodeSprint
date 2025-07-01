@@ -1,23 +1,47 @@
-
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
+  // Redirect if already logged in (based on sessionStorage)
+  useEffect(() => {
+    if (sessionStorage.getItem("loggedIn") === "true") {
+      navigate("/dashboard"); // or your protected route
+    }
+  }, [navigate]);
 
- 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/login/", {
+        email: email,
+        password: password,
+      });
+
+      if (response.status === 200) {
+        alert("Login successful!");
+        // Save login info to sessionStorage
+        sessionStorage.setItem("loggedIn", "true");
+        sessionStorage.setItem("userEmail", email);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Login failed. Please check your email and password.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200 p-4">
       <div className="relative w-full max-w-md md:max-w-xl bg-white rounded-b-[4rem] shadow-lg transition-all duration-500 hover:scale-[1.03]">
-        <img src="" alt="" />
         <div className="p-8 pt-8">
           <h2 className="text-2xl font-bold text-center mb-6">Sign In</h2>
-          <form  className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
               <span className="block mb-1 text-sm font-medium">Email Address</span>
               <input
@@ -28,8 +52,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <i className="fa-envelope fa-regular absolute left-2 top-9 text-gray-400 pointer-events-none">
-</i>
+              <i className="fa-envelope fa-regular absolute left-2 top-9 text-gray-400 pointer-events-none"></i>
             </div>
             <div className="relative">
               <span className="block mb-1 text-sm font-medium">Password</span>
@@ -41,14 +64,9 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <i className="fa-lock fa-solid absolute left-2 top-9 text-gray-400 pointer-events-none">
-              </i>
+              <i className="fa-lock fa-solid absolute left-2 top-9 text-gray-400 pointer-events-none"></i>
             </div>
-            {/* <div className="text-right text-sm">
-              <a href="home" className="text-black hover:underline hover:text-red-500 font-semibold">
-                Forgot password?
-              </a>
-            </div> */}
+
             <div className="flex justify-center">
               <button
                 type="submit"
@@ -69,5 +87,3 @@ export default function Login() {
     </div>
   );
 }
-
-
