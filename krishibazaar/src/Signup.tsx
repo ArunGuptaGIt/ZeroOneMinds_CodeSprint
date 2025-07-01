@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const districts = [
   "Achham",
@@ -89,106 +89,126 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [choice, setChoice] = useState("vendor");
+  const [imageFile, setImageFile] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!imageFile) {
+      alert("Please upload an image for verification.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("first_name", firstName);
+    formData.append("last_name", lastName);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("location", selectedDistrict);
+    formData.append("type", choice === "farmer" ? 1 : 0);
+    formData.append("image_for_verification", imageFile);
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/signup/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 201 || response.status === 200) {
+        alert("Signup successful!");
+        navigate("/login");
+      } else {
+        alert("Signup failed. Please try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred during signup.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-200 text-[15px] px-4 py-10">
-      
-      <img src="" alt="" />
-
-      <div className="bg-white w-[36rem] rounded-b-[4rem] shadow-[0.1rem_0.1rem_0.1rem_0.25rem_#DEDEDE] p-8 mt-[8rem] transition-all duration-500">
+      <form onSubmit={handleSubmit} className="bg-white w-[36rem] rounded-b-[4rem] shadow-md p-8 mt-[8rem] transition-all duration-500" encType="multipart/form-data">
         <h2 className="text-center text-3xl font-bold text-gray-800">Sign Up</h2>
 
-         <div className="flex justify-around gap-3 mt-[2rem] animate__animated animate__fadeInRight">
+        <div className="flex justify-around gap-3 mt-[2rem]">
           <button
-            className={`h-[3rem] w-[10rem] rounded-2xl flex justify-center items-center cursor-pointer ${
-              choice === "vendor" ? "bg-green-500 text-white" : "bg-gray-200"
-            }`}
+            type="button"
+            className={`h-[3rem] w-[10rem] rounded-2xl ${choice === "vendor" ? "bg-green-500 text-white" : "bg-gray-200"}`}
             onClick={() => setChoice("vendor")}
           >
             Vendor
           </button>
-
           <button
-            className={`h-[3rem] w-[10rem] rounded-2xl flex justify-center items-center cursor-pointer ${
-              choice === "farmer" ? "bg-green-500 text-white" : "bg-gray-200"
-            }`}
+            type="button"
+            className={`h-[3rem] w-[10rem] rounded-2xl ${choice === "farmer" ? "bg-green-500 text-white" : "bg-gray-200"}`}
             onClick={() => setChoice("farmer")}
           >
             Farmer
           </button>
         </div>
 
-         
-        <div className="flex justify-between animate__animated animate__fadeInLeft">
-         <div className="mt-6 flex flex-col sm:flex-row gap-5 animate__animated animate__fadeInLeft">
-  {/* First Name */}
-  <div className="relative w-full">
-    <label className="block text-gray-700 font-medium">First Name</label>
-    <input
-      type="text"
-      className="pl-[2rem] w-full p-3 mt-1 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
-      placeholder="Enter your First Name"
-      value={firstName}
-      onChange={(e) => setFirstName(e.target.value)}
-      required
-    />
-    <i className="fa-regular fa-user absolute top-[58%] left-[2%] text-gray-500" />
-  </div>
+        <div className="mt-6 flex flex-col sm:flex-row gap-5">
+          <div className="relative w-full">
+            <label className="block text-gray-700 font-medium">First Name</label>
+            <input
+              type="text"
+              className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
+              placeholder="Enter your First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+          </div>
 
-  {/* Last Name */}
-  <div className="relative w-full">
-    <label className="block text-gray-700 font-medium">Last Name</label>
-    <input
-      type="text"
-      className="pl-[2rem] w-full p-3 mt-1 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
-      placeholder="Enter your Last Name"
-      value={lastName}
-      onChange={(e) => setLastName(e.target.value)}
-      required
-    />
-    <i className="fa-regular fa-user absolute top-[58%] left-[2%] text-gray-500" />
-  </div>
-</div>
+          <div className="relative w-full">
+            <label className="block text-gray-700 font-medium">Last Name</label>
+            <input
+              type="text"
+              className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
+              placeholder="Enter your Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+          </div>
         </div>
 
-         <div className="mt-6 relative animate__animated animate__fadeInLeft">
-          <label className="block text-gray-700 font-medium">
-            Email Address
-          </label>
+        <div className="mt-6 relative">
+          <label className="block text-gray-700 font-medium">Email Address</label>
           <input
             type="email"
-            className="pl-[2rem] w-full p-3 mt-1 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+            className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
             placeholder="Enter your Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <i className="fa-regular fa-envelope absolute top-[58%] left-[2%]"></i>
         </div>
 
-
-           <div className="mt-4 relative animate__animated animate__fadeInLeft">
+        <div className="mt-4 relative">
           <label className="block text-gray-700 font-medium">Password</label>
           <input
             type="password"
-            className="pl-[2rem] w-full p-3 mt-1 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2  focus:ring-gray-500 transition"
+            className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
             placeholder="Enter your Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <i className="fa-solid fa-key absolute top-[58%] left-[2%]"></i>
         </div>
 
- <div className="mt-6 relative animate__animated animate__fadeInLeft">
+        <div className="mt-6 relative">
           <label className="block text-gray-700 font-medium">Location</label>
           <select
-            id="district"
-            name="district"
             value={selectedDistrict}
             onChange={(e) => setSelectedDistrict(e.target.value)}
             required
-            className="pl-[2rem] w-full p-3 mt-1 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+            className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
           >
             <option value="">-- Select District --</option>
             {districts.map((district, index) => (
@@ -197,36 +217,45 @@ export default function Signup() {
               </option>
             ))}
           </select>
-          <i className="fa-solid fa-location-dot absolute top-[58%] left-[2%] text-gray-500"></i>
         </div>
 
-         <div className="mt-6 relative animate__animated animate__fadeInLeft">
-          <label className="block text-gray-700 font-medium">
-            Phone Number
-          </label>
+        <div className="mt-6 relative">
+          <label className="block text-gray-700 font-medium">Phone Number</label>
           <input
             type="number"
-            className="pl-[2rem] w-full p-3 mt-1 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 transition"
+            className="pl-[2rem] w-full p-3 mt-1 border rounded-lg"
             placeholder="Enter your Phone Number"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             required
           />
-          <i className="fa-solid fa-phone absolute top-[58%] left-[2%]"></i>
         </div>
 
-          <button className="w-full mt-6 bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition duration-300 shadow-md">
-            Register
-          </button>
-
-          <div className="text-center mt-4">
-            <span>Already Have an Account? </span>
-            <Link to="/login" className="text-red-600 font-semibold hover:underline">
-              Sign in
-            </Link>
-          </div>
+        <div className="mt-6 relative">
+          <label className="block text-gray-700 font-medium">Verification Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files[0])}
+            required
+            className="w-full p-3 mt-1 border rounded-lg"
+          />
         </div>
-      </div>
-   
+
+        <button
+          type="submit"
+          className="w-full mt-6 bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-gray-600 transition duration-300"
+        >
+          Register
+        </button>
+
+        <div className="text-center mt-4">
+          <span>Already Have an Account? </span>
+          <Link to="/login" className="text-red-600 font-semibold hover:underline">
+            Sign in
+          </Link>
+        </div>
+      </form>
+    </div>
   );
 }

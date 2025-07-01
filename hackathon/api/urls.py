@@ -6,5 +6,4 @@ urlpatterns = [
     path('storage/',views.StorageMethods,name='StorageMethods'),
     path('storage/vendor_items',views.GetItemsForVendors,name='GetItemsForVendors'),
     path('storage/farmers_items',views.GetItemsForFarmers,name='GetItemsForFarmers'),
-
 ]
