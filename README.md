@@ -28,18 +28,25 @@ KrishiBazaar is a web-based platform designed to bridge gap between farmers and 
 - During transactions, delivery locations are selected, and distance-based delivery fees are calculated and shown, promoting trust and transparency.  
 
 ## ✨Key Features
-hamro ma k k xa, dashboard, login, market place haru, sigin up, search 
+- Login
+- User Dashboard
+  - Farmer dashboard
+  - Vendor dashboard
 
 ## 🛠Tech Stack
 ### Frontend
 -react.js
 -tailwind css
+### backend
+- django rest framework
+- database SQLite3
+
 ## Future Scope
 
 ## Images references  
--Unsplash
--Pixabay
--Pixels
+- Unsplash
+- Pixabay
+- Pixels
 
   ## Author  
   [Arun Gupta](https://www.linkedin.com/in/arungupta36904/)
