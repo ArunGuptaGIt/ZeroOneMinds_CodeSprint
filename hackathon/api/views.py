@@ -67,3 +67,26 @@ def GetItemsForFarmers(request):
         return Response(serializer_.data,status=200)
     return Response(serializer.errors,status=400)
             
+@api_view(['PUT','DELETE'])
+def UpdateDeleteItem(request,item_id):
+    if request.method == 'PUT':
+        if item_id != None:
+            try:
+                item = models.Storage.objects.get(id = item_id)
+            except models.Storage.DoesNotExist:
+                return Response({"message" : "The item does not exist"},status=404)
+            
+            serializer = serializers.storage_serializer(item,data = request.data,partial = True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data,status=200)
+            return Response(serializer.errors,status=201)
+        return Response({"message" : "venue id requried"})
+    if request.method == "DELETE":
+        if item_id != None:
+            try:
+                item = models.Storage.objects.get(id = item_id)
+                item.delete()
+                return Response({"message" : "item deleted"})
+            except models.Storage.DoesNotExist:
+                return Response({"message" : "The item does not exist"},status=404)
